@@ -15,7 +15,7 @@ provider "aws" {
 }
 
 # Create EC2 instance
-resource "aws_instance" "default" {
+resource "aws_instance" "default1" {
   ami                    = var.ami
   count                  = var.instance_count
   key_name               = var.key_name
@@ -24,12 +24,12 @@ resource "aws_instance" "default" {
   instance_type          = var.instance_type
 
   tags = {
-    Name = "terraform-default"
+    Name = "terraform-default1"
   }
 }
 
 # Create Security Group for EC2
-resource "aws_security_group" "default" {
+resource "aws_security_group" "default1" {
   name = "terraform-default-sg"
 
   ingress {
