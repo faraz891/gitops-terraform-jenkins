@@ -3,13 +3,13 @@ terraform {
   backend "s3" {
     bucket = "gitops-terraform-jenkins"
     key    = "terraform.tfstate"
-    region = "us-west-2"
+    region = "eu-west-1"
   }
 }
 
 # Use AWS Terraform provider
 provider "aws" {
-  region = "us-west-2"
+  region = "eu-west-1"
   access_key = "AKIA5MZCKJMC6XAPYEBO"
   secret_key= "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"
 }
