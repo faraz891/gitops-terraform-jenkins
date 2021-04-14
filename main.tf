@@ -29,7 +29,7 @@ resource "aws_instance" "terraform" {
 }
 
 # Create Security Group for EC2
-resource "aws_security_group" "terraform" {
+resource "aws_security_group" "default" {
   name = "terraform-default-sg"
 
   ingress {
