@@ -7,42 +7,43 @@ terraform {
   }
 }
 
-
+# Use AWS Terraform provider
 provider "aws" {
-  region = "eu-west-1"
+  region = "us-west-2"
   access_key = "AKIA5MZCKJMCZNL4DSEE"
   secret_key= "TRdZ86wpqP4UxAFlTgYVrrbXx1KyHVDM9SU6lR1P"
 }
 
-module "vpc" {
-  source = "../../"
-
-  name = "simple-example"
-
-  cidr = "10.0.0.0/16"
-
-  azs             = ["us-west-2a", "us-west-2b"]
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
-
-  enable_ipv6 = true
-
-  enable_nat_gateway = false
-  single_nat_gateway = true
-
-  enable_s3_endpoint       = true
-  enable_dynamodb_endpoint = true
-
-  public_subnet_tags = {
-    Name = "overridden-name-public"
-  }
+# Create EC2 instance
+resource "aws_instance" "default" {
+  ami                    = var.ami
+  count                  = var.instance_count
+  key_name               = var.key_name
+  vpc_security_group_ids = [aws_security_group.default.id]
+  source_dest_check      = false
+  instance_type          = var.instance_type
 
   tags = {
-    Owner       = "user"
-    Environment = "dev"
+    Name = "terraform"
+  }
+}
+
+# Create Security Group for EC2
+resource "aws_security_group" "default" {
+  name = "terraform-default-sg"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
-  vpc_tags = {
-    Name = "vpc-name"
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
+
 }
